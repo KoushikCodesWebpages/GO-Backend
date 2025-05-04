@@ -3,28 +3,23 @@ name: Deploy Go App to VPS
 on:
   push:
     branches:
-      - prod  # Triggers only when pushing to 'prod' branch
+      - prod
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v2  # This ensures the code is checked out
-
-      - name: Deploy to VPS via SSH
+      - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.0
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use SSH private key here instead of password
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            # Navigate to the home directory
             cd /home/${{ secrets.VPS_USER }}
 
-            # Check if the project directory exists; clone if not
             if [ ! -d "jse" ]; then
               echo "Cloning repository..."
               git clone git@github.com:KoushikCodesWebpages/GO-Backend.git jse
@@ -32,7 +27,7 @@ jobs:
               cd jse
               echo "Repository already exists. Pulling latest code..."
               git fetch origin
-              git reset --hard origin/prod  # Sync with the prod branch
+              git reset --hard origin/prod
             fi
 
             cd jse
@@ -45,7 +40,4 @@ jobs:
             docker build -t ${{ secrets.APP_NAME }} .
 
             echo "Running new container..."
-            docker run -d \
-              -p 5000:5000 \
-              --name ${{ secrets.APP_NAME }} \
-              ${{ secrets.APP_NAME }}
+            docker run -d -p 5000:5000 --name ${{ secrets.APP_NAME }} ${{ secrets.APP_NAME }}
