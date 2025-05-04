@@ -4,10 +4,19 @@ on:
   push:
     branches:
       - prod
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+
     steps:
+      # Add VPS to known_hosts to avoid SSH verification issues
+      - name: Add VPS to known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
+
+      # Deploy via SSH using the private key
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.0
         with:
@@ -16,6 +25,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
+            set -x  # This enables debug output for the shell script
             cd /home/${{ secrets.VPS_USER }}
 
             if [ ! -d "jse" ]; then
