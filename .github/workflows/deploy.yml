@@ -10,12 +10,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2  # This ensures the code is checked out
+
       - name: Deploy to VPS via SSH
         uses: appleboy/ssh-action@v0.1.0
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          password: ${{ secrets.SSH_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}  # Use SSH private key here instead of password
+          port: 22
           script: |
             # Navigate to the home directory
             cd /home/${{ secrets.VPS_USER }}
@@ -23,7 +27,7 @@ jobs:
             # Check if the project directory exists; clone if not
             if [ ! -d "jse" ]; then
               echo "Cloning repository..."
-              git clone https://${{ secrets.GH_PAT }}@github.com/KoushikCodesWebpages/GO-Backend.git jse
+              git clone git@github.com:KoushikCodesWebpages/GO-Backend.git jse
             else
               cd jse
               echo "Repository already exists. Pulling latest code..."
@@ -44,5 +48,4 @@ jobs:
             docker run -d \
               -p 5000:5000 \
               --name ${{ secrets.APP_NAME }} \
-
               ${{ secrets.APP_NAME }}
