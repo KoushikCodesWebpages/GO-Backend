@@ -16,13 +16,13 @@ jobs:
           mkdir -p ~/.ssh
           ssh-keyscan -H ${{ secrets.VPS_IP }} >> ~/.ssh/known_hosts
 
-      # Deploy via SSH using the private key
+      # Deploy via SSH using the VPS password
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.0
         with:
           host: ${{ secrets.VPS_IP }}
           username: ${{ secrets.VPS_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PASSWORD}}  # Using the password here
           port: 22
           script: |
             set -x  # This enables debug output for the shell script
