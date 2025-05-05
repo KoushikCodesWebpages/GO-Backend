@@ -18,7 +18,7 @@ COPY .env .
 COPY public/dist ./public/dist
 
 # Expose the port your application listens on
-EXPOSE 5000
+EXPOSE 8000
 
 # Define the command to run your application
 CMD ["./JSE"]
