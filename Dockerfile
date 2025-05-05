@@ -7,6 +7,7 @@ RUN apk add --no-cache ca-certificates
 # Set the working directory inside the container
 WORKDIR /JSE
 
+
 # Copy the Go binary into the container
 COPY JSE .
 
