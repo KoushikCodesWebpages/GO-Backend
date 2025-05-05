@@ -46,4 +46,4 @@ jobs:
             docker build -t ${{ secrets.APP_NAME }} .
 
             echo "Running new container using existing .env..."
-            docker run -p -d 8000:8000 --env-file .env --name ${{ secrets.APP_NAME }} ${{ secrets.APP_NAME }}
+            docker run -d -p 8000:8000 --env-file .env --name ${{ secrets.APP_NAME }} ${{ secrets.APP_NAME }}
