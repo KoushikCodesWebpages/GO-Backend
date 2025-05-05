@@ -48,4 +48,4 @@ jobs:
             docker build -t ${{ secrets.APP_NAME }} .
 
             echo "Running new container..."
-            docker run -d -p 8000:8000 --name ${{ secrets.APP_NAME  }} ${{ secrets.APP_NAME }}
+            docker run -p 8000:8000 --name ${{ secrets.APP_NAME  }} ${{ secrets.APP_NAME }}
